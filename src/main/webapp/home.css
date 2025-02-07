@@ -1,0 +1,336 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f1e7; /* Couleur de fond légèrement beige */
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+	--primary-color: #FD632F;
+    --secondary-color: #FF8B66;
+}
+
+.search-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.squishy {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.squishy:hover {
+    background: linear-gradient(135deg, #ff6f61, #ff4f3a);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.squishy:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.squishy::before {
+    content: "⭐";
+    font-size: 18px;
+}
+
+
+.temp-res {
+	font-size: 16px
+}
+
+.search-header input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+
+.search-header button {
+    padding: 10px;
+    margin-left: 10px;
+    border: none;
+    background: #ff9f43;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.content-section h1 {
+	text-align : center;
+}
+
+.logo-section strong {
+    font-family: 'Pacifico', cursive;
+    font-size: 24px;
+}
+
+.header-section {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.login-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+user-login {
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.search-header button {
+    padding: 10px 15px;
+    border: none;
+    background: #fff;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button:hover {
+    background: #e35d50;
+}
+
+/* RECHERCHE */
+.search-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.search-header input {
+    padding: 12px;
+    width: 300px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.search-header button {
+    padding: 12px 20px;
+    margin-left: 10px;
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.search-header button:hover {
+    background: var(--secondary-color);
+}
+
+/* CONTAINER MÉTÉO */
+.weather-container {
+    background: #ffffff;
+    padding: 10px 20px;
+    margin: 40px auto;
+    max-width: 400px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* TITRE */
+.weather-container h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.container_info {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* TEMPÉRATURE PRINCIPALE */
+.temperature-info {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: left;
+    margin: 10px 0;
+}
+
+/* TEMPÉRATURE MAX/MIN */
+.temp-range {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* SECTIONS D'INFORMATIONS */
+.weather-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    font-size: 14px;
+}
+
+#weather-info h2 {
+	margin-block-start: 0;
+}
+
+/* STYLE DES INFOS INDIVIDUELLES */
+.weather-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* SOLEIL */
+.sun-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+    background: #fde4e4;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.sun-icon {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.chargment-content {
+	display: flex;
+	align-item: center;
+	justify-content: center;
+}
+
+.chargement-content p {
+	text-align: center;
+}
+
+
+.favoris-section {
+    background: #fff8e1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.favoris-section h2 {
+    font-size: 24px;
+    color: #222;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.favoris-section h2::before {
+    content: "⭐";
+    font-size: 28px;
+}
+
+.favoris-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+    flex-flow: wrap;
+}
+
+.favoris-list li {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.favoris-list li p {
+    margin: 5px 0;
+   	font-size: 14px;
+}
+
+.favoris-list .city-name {
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.favoris-list .temp {
+   	font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.favoris-list .temp::before {
+    content: "🌡";
+    font-size: 18px;
+}
+
+.favoris-list .max-min {
+    font-size: 12px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.favoris-list .max-min::before {
+    content: "🔺";
+    color: red;
+}
+
+.favoris-list .max-min::after {
+    content: "🔻";
+    color: blue;
+}
+
+.favoris-btn {
+	display: flex;
+	justify-content: end;
+	margin: auto;
+}
+
+.favoris-btn button {
+	padding : 0px 0px;
+}
