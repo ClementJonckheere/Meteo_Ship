@@ -28,7 +28,7 @@ public class FavorisService {
 
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("⚠️ Ce favori existe déjà !");
-                return; // Ne pas insérer si la ville est déjà en favori
+                return;
             }
 
             try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
@@ -44,10 +44,6 @@ public class FavorisService {
             e.printStackTrace();
         }
     }
-
-
-
-
 
 
     public static List<Favori> getFavoris(int userId) {
@@ -76,4 +72,27 @@ public class FavorisService {
         return favoris;
     }
 
+
+    public static void supprimerFavori(int userId, String city) {
+        System.out.println("📌 Suppression du favori pour userId: " + userId + ", ville: " + city);
+
+        String sql = "DELETE FROM favoris WHERE user_id = ? AND city = ?";
+
+        try (Connection conn = OracleConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, city);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("✅ Favori supprimé avec succès !");
+            } else {
+                System.out.println("⚠️ Aucun favori supprimé. La ville n'existe peut-être pas.");
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Erreur SQL lors de la suppression du favori : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

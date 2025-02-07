@@ -38,41 +38,49 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("❌ Erreur lors de la récupération de la météo :", error));
     }
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                let lat = position.coords.latitude;
-                let lon = position.coords.longitude;
+    function checkAndUpdateWeather() {
+        let storedCity = sessionStorage.getItem("searched_city"); // 🔹 Vérifie si une ville a été recherchée
+        let storedLat = localStorage.getItem("user_lat");
+        let storedLon = localStorage.getItem("user_lon");
 
-                try {
-                    let storedLat = localStorage.getItem("user_lat");
-                    let storedLon = localStorage.getItem("user_lon");
+        if (storedCity) {
+            console.log(`📌 Recherche détectée : ${storedCity}, on ne met PAS à jour avec la géolocalisation.`);
+            return; // ⚠ Si une ville a été recherchée, on ne met pas à jour avec la géolocalisation
+        }
 
-                    // Vérifie si les coordonnées sont différentes ou non enregistrées
-                    if (!storedLat || !storedLon || storedLat != lat || storedLon != lon) {
-                        localStorage.setItem("user_lat", lat);
-                        localStorage.setItem("user_lon", lon);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+
+                    try {
+                        if (!storedLat || !storedLon || storedLat != lat || storedLon != lon) {
+                            localStorage.setItem("user_lat", lat);
+                            localStorage.setItem("user_lon", lon);
+                        }
+
+                        // 🛑 Si aucune recherche manuelle, on met à jour la météo
+                        fetchWeather(lat, lon);
+
+                    } catch (e) {
+                        console.error("🚨 Erreur d'accès au stockage local:", e.message);
                     }
-
-                    // Récupère la météo dynamiquement sans recharger la page
-                    fetchWeather(lat, lon);
-
-                } catch (e) {
-                    console.error("🚨 Erreur d'accès au stockage local:", e.message);
+                },
+                function (error) {
+                    console.error("❌ Erreur de géolocalisation:", error.message);
+                    fetchWeather(48.8566, 2.3522); // Paris par défaut
                 }
-            },
-            function (error) {
-                console.error("❌ Erreur de géolocalisation:", error.message);
-
-                // Si la géolocalisation est refusée, afficher Paris par défaut
-                fetchWeather(48.8566, 2.3522); // Coordonnées de Paris
-            }
-        );
-    } else {
-        console.log("⚠️ La géolocalisation n'est pas supportée.");
-        fetchWeather(48.8566, 2.3522); // Coordonnées de Paris
+            );
+        } else {
+            console.log("⚠️ La géolocalisation n'est pas supportée.");
+            fetchWeather(48.8566, 2.3522); // Paris par défaut
+        }
     }
+
+    checkAndUpdateWeather(); // ✅ Lance la mise à jour SEULEMENT si aucune ville n'a été recherchée
 });
+
 </script>
 
 
@@ -107,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </form>
             <% } else { %>
                 <button class="button button--animated">
-                	<a href="Login.jsp"><span>Connexion</span></a>
+                	<a href="Login.jsp" class="link-connexion"><span class="button__text">Connexion</span></a>
                 	<span class="button__icon">→</span>
                 </button>
             <% } %>
@@ -117,8 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section class="content-section">
     <h1>Météo en temps réel</h1>
-    <form action="home" method="get" class="search-header">
-        <input type="text" name="city" placeholder="Rechercher une ville..." required>
+    <form action="home" method="get" class="search-header" onsubmit="storeSearchCity()">
+        <input type="text" name="city" id="search-city" placeholder="Rechercher une ville..." required>
         <button type="submit">Rechercher</button>
     </form>
 </section>
@@ -175,6 +183,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p class="temp">Température actuelle : <%= meteo.getTemperature() %>°C</p>
                     <p class="temp">Température ressentie : <%= meteo.getFeelsLike() %>°C</p>
                     <p class="max-min">Max : <%= meteo.getTempMax() %>°C / Min : <%= meteo.getTempMin() %>°C</p>
+                    
+                    <form class="form-delete" action="home" method="post" onsubmit="return confirmDelete()">
+                    	<input type="hidden" name="deleteCity" value="<%= meteo.getCity() %>">
+                    	<button type="submit" class="delete-fav-btn">🗑 Supprimer</button>
+                	</form>
                 </li>
             <% } %>
         </ul>
@@ -189,6 +202,20 @@ document.addEventListener("DOMContentLoaded", function () {
 <section class="cart-section">
 <%@ include file="WeatherCart.jsp" %>
 </section>
+
+
+<script>
+    function confirmDelete() {
+        return confirm("❗ Voulez-vous vraiment supprimer ce favori ?");
+    }
+    
+    function storeSearchCity() {
+        let city = document.getElementById("search-city").value;
+        sessionStorage.setItem("searched_city", city);
+    }
+</script>
+
+
 
 </body>
 </html>

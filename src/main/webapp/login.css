@@ -144,31 +144,19 @@ a {
   color: red;
 }
 
-#contentCloud {
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
+
+.delete-fav-btn {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
 }
 
-#contentCloud div {
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-}
-
-.cloudBase {
-  width: 100vw;
-  height: 1px;
-  margin-left: 44%;
-}
-
-.cloudLayer {
-  width: 256px;
-  height: 256px;
-  margin-left: -200px;
-  margin-top: -150px;
-  -webkit-transition: opacity 0.5s ease-out;
-  -moz-transition: opacity 0.5s ease-out;
-  -o-transition: opacity 0.5s ease-out;
+.delete-fav-btn:hover {
+    background: #cc0000;
 }
 

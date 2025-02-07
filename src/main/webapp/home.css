@@ -334,3 +334,26 @@ button:hover {
 .favoris-btn button {
 	padding : 0px 0px;
 }
+
+.delete-fav-btn {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.delete-fav-btn:hover {
+    background: #cc0000;
+}
+
+.form-delete {
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}

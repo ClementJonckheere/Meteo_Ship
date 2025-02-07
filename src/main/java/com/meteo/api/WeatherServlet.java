@@ -69,18 +69,25 @@ public class WeatherServlet extends HttpServlet {
 
 		    String city = request.getParameter("city");
 		    String country = request.getParameter("country");
+		    String deleteCity = request.getParameter("deleteCity"); 
 
 		    System.out.println("📌 Récupération des données pour ajout en favori");
 		    System.out.println("   → userId: " + userId);
 		    System.out.println("   → city: " + city);
 		    System.out.println("   → country: " + country);
 
-		    if (userId != null && city != null && !city.isEmpty()) {
-		        System.out.println("📌 Appel de FavorisService.ajouterFavori()");
-		        FavorisService.ajouterFavori(userId, city, country);
-		        System.out.println("✅ Favori ajouté avec succès !");
+		    if (userId != null) {
+		        if (deleteCity != null) { // 🔴 Suppression d'un favori
+		            System.out.println("📌 Suppression du favori : " + deleteCity);
+		            FavorisService.supprimerFavori(userId, deleteCity);
+		            System.out.println("✅ Favori supprimé !");
+		        } else if (city != null && !city.isEmpty()) { // 🟢 Ajout d'un favori
+		            System.out.println("📌 Ajout d'un favori : " + city);
+		            FavorisService.ajouterFavori(userId, city, country);
+		            System.out.println("✅ Favori ajouté !");
+		        }
 		    } else {
-		        System.out.println("❌ Erreur: Impossible d'ajouter le favori. Vérifier userId et city.");
+		        System.out.println("❌ Erreur: Impossible de modifier les favoris (user non connecté).");
 		    }
 
 		    response.sendRedirect("home");
