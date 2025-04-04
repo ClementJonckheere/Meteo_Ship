@@ -23,9 +23,11 @@ public class Login extends HttpServlet {
         String login = request.getParameter("txtLogin");
         String password = request.getParameter("txtPassword");
 
+        // creation de la session des users
         HttpSession session = request.getSession(true);
         session.setAttribute("login", login);
 
+        // vérification des users
         if (userDAO.validateUser(login, password)) {
             int userId = userDAO.getUserId(login);  // Ajouter cette méthode dans `UserDAO`
             session.setAttribute("userId", userId); // Stocker l'ID utilisateur en session

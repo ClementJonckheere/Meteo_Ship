@@ -1,359 +1,232 @@
-@charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
-
+/* Styles généraux */
 body {
     font-family: 'Poppins', sans-serif;
-    background: #f5f1e7; /* Couleur de fond légèrement beige */
+    background-color: #e0e7ef;
     margin: 0;
-    padding: 0;
-}
-
-:root {
-	--primary-color: #FD632F;
-    --secondary-color: #FF8B66;
-}
-
-.search-header {
+    background: url("/Meteo_projet/images/bg-img.jpg") no-repeat center center fixed;
+    background-size: cover;
+    background-position: center;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
+  	flex-direction: column;
+  	height: 100%;
 }
 
-.squishy {
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
-    position: relative;
-    overflow: hidden;
+body:before {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height:100%;
+	background: rgb(0,0,0,0.15);
+	backdrop-filter: blur(10px);
 }
 
-.squishy:hover {
-    background: linear-gradient(135deg, #ff6f61, #ff4f3a);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-
-.squishy:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.squishy::before {
-    content: "⭐";
-    font-size: 18px;
-}
-
-
-.temp-res {
-	font-size: 16px
-}
-
-.search-header input {
-    padding: 10px;
-    width: 250px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-
-.search-header button {
-    padding: 10px;
-    margin-left: 10px;
-    border: none;
-    background: #ff9f43;
-    color: black;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.content-section h1 {
-	text-align : center;
-}
-
-.logo-section strong {
-    font-family: 'Pacifico', cursive;
-    font-size: 24px;
-}
-
-.header-section {
-    display: flex;
-    width: 90%;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo-section {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.login-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-user-login {
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.search-header button {
-    padding: 10px 15px;
-    border: none;
-    background: #fff;
-    color: black;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-button:hover {
-    background: #e35d50;
-}
-
-/* RECHERCHE */
-.search-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.search-header input {
-    padding: 12px;
-    width: 300px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-.search-header button {
-    padding: 12px 20px;
-    margin-left: 10px;
-    border: none;
-    background: var(--primary-color);
-    color: white;
-    cursor: pointer;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.search-header button:hover {
-    background: var(--secondary-color);
-}
-
-/* CONTAINER MÉTÉO */
+/* Conteneur principal de la carte météo */
 .weather-container {
-    background: #ffffff;
-    padding: 10px 20px;
-    margin: 40px auto;
-    max-width: 400px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* TITRE */
-.weather-container h2 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.container_info {
-	display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-/* TEMPÉRATURE PRINCIPALE */
-.temperature-info {
-    font-size: 35px;
-    font-weight: bold;
-    text-align: left;
-    margin: 10px 0;
-}
-
-/* TEMPÉRATURE MAX/MIN */
-.temp-range {
-    font-size: 18px;
-    font-weight: bold;
+    width: 350px;
+    padding: 20px;
+    border-radius: 12px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(100px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    margin-bottom: 15px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-/* SECTIONS D'INFORMATIONS */
-.weather-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+#weather-info {
+	display:flex;
+	justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+}
+
+
+/* Barre de recherche */
+.search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 33%;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(100px);
+    margin: 25px;
+}
+
+.search-header input {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: white;
+    flex: 1;
     font-size: 14px;
 }
 
-#weather-info h2 {
-	margin-block-start: 0;
+.search-header button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
 }
 
-/* STYLE DES INFOS INDIVIDUELLES */
+/* Ville et date */
+.location {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.city-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.city-info i {
+    font-size: 16px;
+    color: white;
+}
+
+/* Température principale */
+.temperature-info {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.details-info-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.content-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.15));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.content-temperature {
+	font-size: 30px;
+	font-weight: bolder;
+	margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+
+.weather-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.temperature {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.condition {
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+/* Détails météo */
+.weather-details {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
 .weather-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    background: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    gap: 4px;
+    justify-content: center;
 }
 
-/* SOLEIL */
+.weather-item p {
+	margin-block-start: 0em;
+    margin-block-end: 0em;
+}
+
+.weather-item img {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+}
+
 .sun-info {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: #fde4e4;
-    border-radius: 10px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-.sun-icon {
-    font-size: 16px;
-    margin-right: 5px;
-}
-
-.chargment-content {
-	display: flex;
-	align-item: center;
-	justify-content: center;
-}
-
-.chargement-content p {
-	text-align: center;
-}
-
-
-.favoris-section {
-    background: #fff8e1;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.favoris-section h2 {
-    font-size: 24px;
-    color: #222;
-    display: flex;
-    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    font-size: 14px;
     gap: 10px;
 }
 
-.favoris-section h2::before {
-    content: "⭐";
-    font-size: 28px;
-}
-
-.favoris-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: 10px;
-    flex-flow: wrap;
-}
-
-.favoris-list li {
-    background: #fff;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.favoris-list li p {
-    margin: 5px 0;
-   	font-size: 14px;
-}
-
-.favoris-list .city-name {
-    font-weight: bold;
-    font-size: 18px;
+.sun-info p {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    background: rgb(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 12px;
 }
 
-.favoris-list .temp {
-   	font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.favoris-list .temp::before {
-    content: "🌡";
-    font-size: 18px;
-}
-
-.favoris-list .max-min {
-    font-size: 12px;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.favoris-list .max-min::before {
-    content: "🔺";
-    color: red;
-}
-
-.favoris-list .max-min::after {
-    content: "🔻";
-    color: blue;
+.sun-info img {
+    width: 18px;
+    height: 18px;
+    filter: invert(1);
 }
 
 .favoris-btn {
 	display: flex;
-	justify-content: end;
-	margin: auto;
+	align-content: start;
+	width: 100%;
 }
 
-.favoris-btn button {
-	padding : 0px 0px;
-}
 
-.delete-fav-btn {
-    background: #ff4d4d;
+.squishy {
+    background: rgba(255, 215, 0, 0.3);
     color: white;
+    font-size: 20px;
     border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
+    padding: 10px 12px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
-}
-
-.delete-fav-btn:hover {
-    background: #cc0000;
-}
-
-.form-delete {
-	display: flex;
-    flex-direction: row;
-    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.2s ease-in-out;
+    display: flex;
     align-items: center;
-    margin-top: 15px;
+    justify-content: center;
+    height: 25px;
+  	width: 20px;
 }
+
+.squishy:hover {
+    background: rgba(255, 215, 0, 0.6);
+    transform: scale(1.15);
+}
+
+footer {
+	bottom: 0;
+  	position: absolute;
+}
+

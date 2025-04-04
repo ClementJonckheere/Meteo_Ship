@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+// Requêtes HTTP REST vers OpenWeather
 public class WeatherService {
     private static final String API_KEY = "6d2ebb790280b956b191f18d3278b3b5";
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";

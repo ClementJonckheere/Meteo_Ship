@@ -2,6 +2,12 @@
 <%@ page import="com.meteo.model.WeatherData, com.meteo.model.Favori, java.util.List" %>
 <%@ page import="jakarta.servlet.http.HttpSession, java.util.List, java.util.ArrayList" %>
 <%@ page import="java.util.List, com.meteo.model.Favori" %>
+<%@ page import="com.meteo.model.FavoriWidget, java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map, com.meteo.model.FavoriWidget" %>
+
+
+
 
 <%
     HttpSession userSession = request.getSession(false);
@@ -13,16 +19,21 @@
     List<Favori> favoris = (List<Favori>) request.getAttribute("favoris");
     List<WeatherData> favorisMeteo = (List<WeatherData>) request.getAttribute("favorisMeteo");
 
-    System.out.println("📌 userId en session = " + userId);
-    System.out.println("📌 Login en session = " + login);
-    System.out.println("📌 isConnected = " + isConnected);
+
+    System.out.println("userId en session = " + userId);
+    System.out.println("Login en session = " + login);
+    System.out.println("isConnected = " + isConnected);  
+    Map<String, FavoriWidget> widgetPreferences = (Map<String, FavoriWidget>) request.getAttribute("widgetPreferences");
+    if (widgetPreferences == null) {
+        widgetPreferences = new HashMap<>(); 
+    }
 %>
 
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     function fetchWeather(lat, lon) {
-        console.log("📌 Récupération de la météo pour la position : ", lat, lon);
+        console.log("Récupération de la météo pour la position : ", lat, lon);
         
         fetch("home?lat=" + lat + "&lon=" + lon)
             .then(response => response.text())
@@ -35,17 +46,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.querySelector("#weather-info").innerHTML = weatherInfo.innerHTML;
                 }
             })
-            .catch(error => console.error("❌ Erreur lors de la récupération de la météo :", error));
+            .catch(error => console.error("Erreur lors de la récupération de la météo :", error));
     }
 
     function checkAndUpdateWeather() {
-        let storedCity = sessionStorage.getItem("searched_city"); // 🔹 Vérifie si une ville a été recherchée
+        let storedCity = sessionStorage.getItem("searched_city");
         let storedLat = localStorage.getItem("user_lat");
         let storedLon = localStorage.getItem("user_lon");
 
         if (storedCity) {
-            console.log(`📌 Recherche détectée : ${storedCity}, on ne met PAS à jour avec la géolocalisation.`);
-            return; // ⚠ Si une ville a été recherchée, on ne met pas à jour avec la géolocalisation
+            console.log(`Recherche détectée : ${storedCity}, on ne met PAS à jour avec la géolocalisation.`);
+            return;
         }
 
         if (navigator.geolocation) {
@@ -59,26 +70,24 @@ document.addEventListener("DOMContentLoaded", function () {
                             localStorage.setItem("user_lat", lat);
                             localStorage.setItem("user_lon", lon);
                         }
-
-                        // 🛑 Si aucune recherche manuelle, on met à jour la météo
                         fetchWeather(lat, lon);
 
                     } catch (e) {
-                        console.error("🚨 Erreur d'accès au stockage local:", e.message);
+                        console.error("Erreur d'accès au stockage local:", e.message);
                     }
                 },
                 function (error) {
-                    console.error("❌ Erreur de géolocalisation:", error.message);
-                    fetchWeather(48.8566, 2.3522); // Paris par défaut
+                    console.error("Erreur de géolocalisation:", error.message);
+                    fetchWeather(48.8566, 2.3522);
                 }
             );
         } else {
-            console.log("⚠️ La géolocalisation n'est pas supportée.");
-            fetchWeather(48.8566, 2.3522); // Paris par défaut
+            console.log("La géolocalisation n'est pas supportée.");
+            fetchWeather(48.8566, 2.3522);
         }
     }
 
-    checkAndUpdateWeather(); // ✅ Lance la mise à jour SEULEMENT si aucune ville n'a été recherchée
+    checkAndUpdateWeather();
 });
 
 </script>
@@ -93,7 +102,9 @@ document.addEventListener("DOMContentLoaded", function () {
     <title>Météo en temps réel</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/home.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/header.css">
-    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/cart.css">    
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/cart.css">   
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/favoris.css"> 
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/footer.css"> 
     <script src="/js/bootstrap.bundle.min.js?t=1738759901"></script>
   	<script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.5.1/maptiler-sdk.umd.min.js"></script>
   	<link href="https://cdn.maptiler.com/maptiler-sdk-js/v2.5.1/maptiler-sdk.css" rel="stylesheet" />
@@ -124,7 +135,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </header>
 
 <section class="content-section">
-    <h1>Météo en temps réel</h1>
     <form action="home" method="get" class="search-header" onsubmit="storeSearchCity()">
         <input type="text" name="city" id="search-city" placeholder="Rechercher une ville..." required>
         <button type="submit">Rechercher</button>
@@ -138,29 +148,42 @@ document.addEventListener("DOMContentLoaded", function () {
             <form action="home" method="post" class="favoris-btn">
                 <input type="hidden" name="city" value="<%= weather.getCity() %>">
                 <input type="hidden" name="country" value="<%= weather.getCountry() %>">
-                <button type="submit" class="squishy squishy-classic">
+                <button type="submit" class="squishy squishy-classic" title="Ajouter aux favoris">❤
                 </button>
             </form>
         <% } %>
-        <h2>🌍 Météo aujourd'hui à <%= weather.getCity() %>, <%= weather.getCountry() %></h2>
-        <div class="container_info">
+       	<div class="location">
+       		<div class="city-info">
+            	<i class="fas fa-map-marker-alt"></i>
+        		<span class="city"><%= weather.getCity() %>, <%= weather.getCountry() %></span>
+        	</div>
+        	<div class="date">Dim, 10 Mars</div>
+        </div>
         	<div class="temperature-info">
-            	<%= weather.getTemperature() %>°C
-            	<div class="temp-res">
-        			<p>Ressenti : <%= weather.getFeelsLike() %>°C </p>
+        	    <img src="https://openweathermap.org/img/wn/<%= weather.getIcon() %>@2x.png" alt="Météo" />
+        	    <div class="details-info-weather">
+            		<p class="content-temperature"><%= weather.getTemperature() %>°C</p>
+            		<div class="details-plus-info-weather">
+        				<p>Ressenti : <%= weather.getFeelsLike() %>°C </p>
+        				<p>Max : <%= weather.getTempMax() %>° / Min : <%= weather.getTempMin() %> </p>
+        			</div>
         		</div>
         	</div>
-
-        	<div class="temp-range">
-            	Max : <%= weather.getTempMax() %>° / Min : <%= weather.getTempMin() %>°
-        	</div>
-		</div>
-		
         <div class="weather-details">
-            <div class="weather-item">Humidité : <%= weather.getHumidity() %>%</div>
-            <div class="weather-item">Vent : <%= weather.getWindSpeed() %> km/h</div>
-            <div class="weather-item">Pression : <%= weather.getPressure() %> mb</div>
-            <div class="weather-item">Visibilité : <%= weather.getVisibility() / 1000.0 %> km</div>
+            <div class="weather-item"><p>Humidité :</p>
+            <p> <%= weather.getHumidity() %>% </p></div>
+            <div class="weather-item">
+            	<p>Vent : </p>
+            	<p><%= weather.getWindSpeed() %> km/h</p>
+            </div>
+            <div class="weather-item">
+            	<p>Pression :</p>
+            	<p><%= weather.getPressure() %> mb</p>
+            </div>
+            <div class="weather-item">
+            	<p>Visibilité : </p>
+            	<p><%= weather.getVisibility() / 1000.0 %> km</p>
+           	</div>
         </div>
 
         <div class="sun-info">
@@ -173,40 +196,74 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="chargment-content">
     </div>
     <% } %>
+
 <% if (isConnected && favorisMeteo != null && !favorisMeteo.isEmpty()) { %>
-    <section class="favoris-section">
-        <h2>Vos villes favorites</h2>
-        <ul class="favoris-list">
-            <% for (WeatherData meteo : favorisMeteo) { %>
-                <li>
-                    <p class="city-name"><%= meteo.getCity() %>, <%= meteo.getCountry() %></p>
-                    <p class="temp">Température actuelle : <%= meteo.getTemperature() %>°C</p>
-                    <p class="temp">Température ressentie : <%= meteo.getFeelsLike() %>°C</p>
-                    <p class="max-min">Max : <%= meteo.getTempMax() %>°C / Min : <%= meteo.getTempMin() %>°C</p>
-                    
-                    <form class="form-delete" action="home" method="post" onsubmit="return confirmDelete()">
-                    	<input type="hidden" name="deleteCity" value="<%= meteo.getCity() %>">
-                    	<button type="submit" class="delete-fav-btn">🗑 Supprimer</button>
-                	</form>
-                </li>
+    <section class="favoris-container">
+        <ul>
+<% 
+    for (WeatherData meteo : favorisMeteo) { 
+        FavoriWidget widget = (widgetPreferences != null && widgetPreferences.containsKey(meteo.getCity())) 
+            ? widgetPreferences.get(meteo.getCity()) 
+            : new FavoriWidget(userId, meteo.getCity(), true, true, true); // Valeurs par défaut
+%>
+        <li class="favori-card">
+            <strong><%= meteo.getCity() %>, <%= meteo.getCountry() %></strong>
+            
+            <% if (widget.isShowTemp()) { %>
+                <p>🌡 Température : <%= meteo.getTemperature() %>°C</p>
             <% } %>
+
+            <% if (widget.isShowHumidity()) { %>
+                <p>💧 Humidité : <%= meteo.getHumidity() %>%</p>
+            <% } %>
+
+            <% if (widget.isShowWind()) { %>
+                <p>💨 Vent : <%= meteo.getWindSpeed() %> km/h</p>
+            <% } %>
+
+            <form action="home" method="post">
+                <input type="hidden" name="city" value="<%= meteo.getCity() %>">
+                
+                <label>
+                    <input type="checkbox" name="showTemp" <%= widget.isShowTemp() ? "checked" : "" %> >
+                    Température
+                </label>
+                
+                <label>
+                    <input type="checkbox" name="showHumidity" <%= widget.isShowHumidity() ? "checked" : "" %> >
+                    Humidité
+                </label>
+                
+                <label>
+                    <input type="checkbox" name="showWind" <%= widget.isShowWind() ? "checked" : "" %> >
+                    Vent
+                </label>
+
+                <button type="submit" name="updatePreferences">Mettre à jour</button>
+            </form>
+
+            <!-- Formulaire pour supprimer un favori -->
+            <form action="home" method="post">
+                <input type="hidden" name="deleteCity" value="<%= meteo.getCity() %>">
+                <button type="submit">🗑 Supprimer</button>
+            </form>
+        </li>
+<% } %>
         </ul>
     </section>
 <% } else { %>
     <p>Aucun favori enregistré.</p>
 <% } %>
 
-    
 </div>
+<jsp:include page="Footer.jsp" />
 
-<section class="cart-section">
-<%@ include file="WeatherCart.jsp" %>
-</section>
+
 
 
 <script>
     function confirmDelete() {
-        return confirm("❗ Voulez-vous vraiment supprimer ce favori ?");
+        return confirm("Voulez-vous vraiment supprimer ce favori ?");
     }
     
     function storeSearchCity() {

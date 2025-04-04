@@ -9,6 +9,7 @@ import org.mindrot.bcrypt.BCrypt;
 
 public class UserDAO {
 	
+	// Récupérer l'ID de l'utilisateur avec son nom d'utilisateur ou email.
 	public int getUserId(String login) {
 	    String query = "SELECT id FROM users WHERE username = ? OR email = ?";
 	    try (Connection conn = OracleConnection.getConnection();
@@ -23,10 +24,10 @@ public class UserDAO {
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	    return -1; // Retourne -1 si l'ID utilisateur n'est pas trouvé
+	    return -1;
 	}
 
-
+	//  Vérifier si l'utilisateur existe et si son mot de passe est correct
 	public boolean validateUser(String login, String password) {
 	    String query = "SELECT password FROM users WHERE username = ? OR email = ?";
 	    
@@ -46,7 +47,7 @@ public class UserDAO {
 	    return false;
 	}
 
-
+	// Inscrire un nouvel utilisateur dans la base de données
 	public boolean registerUser(String username, String email, String password) {
 	    String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 	    String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
